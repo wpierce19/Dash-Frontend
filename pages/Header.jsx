@@ -25,7 +25,7 @@ const Header = () => {
         <header
             className="bg-red-500 dark:bg-black dark:text-white fixed top-0 left-0 z-50 w-full text-white py-3 px-6 flex items-center justify-end"
         >
-            <nav className="lex items-center gap-6 text-lg font-semibold mr-4">
+            <nav className="flex items-center gap-6 text-lg font-semibold mr-4">
                 <Link to="/">Home</Link>
                 <Link to="/inprogress">Messages</Link>
             </nav>
