@@ -15,7 +15,7 @@ const UserRegister = () => {
     const isSubmitting = null;
     return (
         <div className="min-h-screen flex items-center justify-center">
-            <div className="w-full max-w-md p-6 bg-gray-100 dark:bg-gray-500 rounded-lg shadow-lg">
+            <div className="w-full max-w-md p-6 bg-gray-100 dark:bg-gray-500 rounded-lg shadow-lg dark:shadow-black">
                 <h2 className="text-2x1 font-bold text-center mb-6">Sign Up:</h2>
 
                 <form onSubmit={handleSignup}>
