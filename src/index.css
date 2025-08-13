@@ -31,7 +31,8 @@ html, body, #root {
   word-break: break-word;
   outline: none;
   width: 100%;                    /* fill parent width */
-  min-height: 10rem;              /* optional default height */
+  min-height: 10rem;
+  border-radius: 5px;              /* optional default height */
 }
 
 /* remove default margins (Tailwind will handle spacing) */

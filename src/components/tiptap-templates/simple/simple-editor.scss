@@ -55,9 +55,13 @@ body,
 }
 
 .simple-editor-wrapper {
-  width: 100vw;
-  height: 100vh;
-  overflow: auto;
+  border: 1px solid rgb(209 213 219); /* Tailwind gray-300 */
+  border-radius: 0.75rem; /* ~rounded-xl */
+  background-color: white;
+  max-width: 800px; /* set desired width */
+  min-height: 20rem; /* set desired height */
+  overflow: hidden; /* ensure inner content doesn't bleed out */
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05); /* subtle shadow */
 }
 
 .simple-editor-content {
@@ -68,6 +72,7 @@ body,
   display: flex;
   flex-direction: column;
   flex: 1;
+  padding: 1rem;
 }
 
 .simple-editor-content .tiptap.ProseMirror.simple-editor {
@@ -80,3 +85,5 @@ body,
     padding: 1rem 1.5rem 30vh;
   }
 }
+
+
