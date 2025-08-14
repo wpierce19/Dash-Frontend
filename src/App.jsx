@@ -8,7 +8,7 @@ import UserRegister from '../pages/Register';
 function App() {
   return (
     <BrowserRouter>
-      <div className="bg-gray-100 dark:bg-blue-950 text-black dark:text-white w-full h-screen overflow-hidden">
+      <div className="bg-gray-100 dark:bg-zinc-900 text-black dark:text-white w-full h-screen overflow-hidden">
         {/* Fixed Header */}
         <Header />
 

@@ -12,6 +12,9 @@ export const useThemeStore = create((set) => ({
             const next = !state.isDarkMode;
             localStorage.setItem('darkMode', String(next));
             document.documentElement.setAttribute('data-theme', next ? 'dark' : 'light');
+            const root = document.documentElement;
+            root.setAttribute('data-theme', next ? 'dark' : 'light');
+            root.classList.toggle('dark', next);
             return {isDarkMode: next};
         }),
 }));

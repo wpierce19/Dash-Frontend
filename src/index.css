@@ -86,7 +86,7 @@ html, body, #root {
 
 /* dark mode tweaks */
 [data-theme="dark"] .ProseMirror code {
-  background: rgb(31 41 55); /* gray-800 */
+  background: #18181b; /* gray-800 */
 }
 [data-theme="dark"] .ProseMirror blockquote {
   border-left-color: rgb(55 65 81); /* gray-700 */

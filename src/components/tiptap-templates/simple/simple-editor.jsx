@@ -62,9 +62,6 @@ import { useIsMobile } from "@/hooks/use-mobile"
 import { useWindowSize } from "@/hooks/use-window-size"
 import { useCursorVisibility } from "@/hooks/use-cursor-visibility"
 
-// --- Components ---
-import { ThemeToggle } from "@/components/tiptap-templates/simple/theme-toggle"
-
 // --- Lib ---
 import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils"
 
@@ -122,11 +119,7 @@ const MainToolbarContent = ({
       <ToolbarGroup>
         <ImageUploadButton text="Add" />
       </ToolbarGroup>
-      <Spacer />
-      {isMobile && <ToolbarSeparator />}
-      <ToolbarGroup>
-        <ThemeToggle />
-      </ToolbarGroup>
+      {/* Removed ThemeToggle – editor will follow app's theme */}
     </>
   );
 }
@@ -157,11 +150,20 @@ const MobileToolbarContent = ({
   </>
 )
 
-export function SimpleEditor() {
+export function SimpleEditor({
+  onSubmit,
+  onchange,
+  submitLabel = "Submit",
+  disableSubmitWhenEmpty = true,
+}) {
   const isMobile = useIsMobile()
   const { height } = useWindowSize()
   const [mobileView, setMobileView] = React.useState("main")
   const toolbarRef = React.useRef(null)
+
+  const [html, setHtml] = React.useState("");
+  const [isEmpty, setIsEmpty] = React.useState(true);
+  const [submitting, setSubmitting] = React.useState(false);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -174,6 +176,17 @@ export function SimpleEditor() {
         "aria-label": "Main content area, start typing to enter text.",
         class: "simple-editor",
       },
+    },
+    onUpdate: ({editor}) => {
+      if (onchange) {
+        onchange(editor.getHTML())
+      }
+    },
+    onCreate: ({editor}) => {
+      const initial = editor.getHTML()
+      setHtml(initial)
+      setIsEmpty(editor.isEmpty)
+      onchange?.(initial)
     },
     extensions: [
       StarterKit.configure({
@@ -215,6 +228,18 @@ export function SimpleEditor() {
     }
   }, [isMobile, mobileView])
 
+  const handleSubmit = async () => {
+    if (!onSubmit) return;
+    if (disableSubmitWhenEmpty && isEmpty) return;
+    try {
+      setSubmitting(true);
+      console.log(html)
+      await Promise.resolve(onSubmit(html))
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
   return (
     <div className="simple-editor-wrapper">
       <EditorContext.Provider value={{ editor }}>
@@ -239,7 +264,32 @@ export function SimpleEditor() {
           )}
         </Toolbar>
 
-        <EditorContent editor={editor} role="presentation" className="simple-editor-content" />
+        <div className="max-h-96 overflow-y-auto">
+          <div className="pr-0">
+            <EditorContent editor={editor} role="presentation" className="simple-editor-content" />
+          </div>
+        </div>
+        <div
+          className="simple-editor-footer"
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            gap: "0.5rem",
+            padding: "0.5rem 0.75rem",
+            borderTop: "1px solid var(--tt-border-color)",
+            background: "var(--tt-card-bg-color)",
+          }}
+        >
+          <button
+          className="simple-editor-btn"
+            data-style="primary"
+            aria-label={submitLabel}
+            disabled={submitting || (disableSubmitWhenEmpty && isEmpty)}
+            onClick={handleSubmit}
+          >
+            {submitting ? "Submitting..." : submitLabel}
+          </button>
+        </div>
       </EditorContext.Provider>
     </div>
   );

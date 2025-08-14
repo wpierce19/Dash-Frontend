@@ -60,8 +60,14 @@ body,
   background-color: white;
   max-width: 800px; /* set desired width */
   min-height: 20rem; /* set desired height */
+  max-height: 600px;
   overflow: hidden; /* ensure inner content doesn't bleed out */
   box-shadow: 0 1px 2px rgba(0,0,0,0.05); /* subtle shadow */
+}
+
+[data-theme="dark"] .simple-editor-wrapper {
+  background-color: #202123;
+  border-color: #343541;
 }
 
 .simple-editor-content {
@@ -86,4 +92,58 @@ body,
   }
 }
 
+/* 1) Make sure the scroll area itself has no bottom padding */
+.simple-editor-content {
+  padding-bottom: 0 !important;
+}
 
+/* 2) Remove last-block bottom margins (paragraphs, headings, lists, etc.) */
+.simple-editor-content .ProseMirror > *:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* 3) Common nested cases that still add space at the end */
+.simple-editor-content .ProseMirror blockquote > *:last-child,
+.simple-editor-content .ProseMirror li > p:last-child,
+.simple-editor-content .ProseMirror li:last-child,
+.simple-editor-content .ProseMirror ul:last-child,
+.simple-editor-content .ProseMirror ol:last-child,
+.simple-editor-content .ProseMirror pre:last-child,
+.simple-editor-content .ProseMirror hr:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* 4) Ensure the editor root doesn’t inject extra padding at the bottom */
+.simple-editor-content .ProseMirror {
+  padding-bottom: 0 !important;
+}
+
+/* 5) If your template adds a “caret-safe” bottom space via a CSS var, zero it out */
+.simple-editor-wrapper {
+  --simple-editor-safe-bottom: 0px;           /* name used by some templates */
+  --tiptap-safe-bottom: 0px;                  /* alternative name in others */
+}
+
+/* 6) (Optional) Tighten code block spacing at the end */
+.simple-editor-content .ProseMirror pre {
+  margin-bottom: 0.75rem;
+}
+.simple-editor-content .ProseMirror pre:last-child {
+  margin-bottom: 0 !important;
+}
+
+.simple-editor-btn {
+  transition: background-color 0.15s ease-in-out;
+  border-radius: 0.5rem;
+}
+
+/* Light mode: faint white overlay on hover */
+.simple-editor-btn:hover {
+  background-color: #dddddd;
+  cursor: pointer;
+}
+
+/* Dark mode: slightly stronger white overlay */
+[data-theme="dark"] .simple-editor-btn:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+}

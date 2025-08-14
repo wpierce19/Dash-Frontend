@@ -1,5 +1,4 @@
-import { useState } from "react";
-import TiptapEditor from "../src/features/post/editor/TipTapEditor";
+
 import { SimpleEditor } from '@/components/tiptap-templates/simple/simple-editor'
 
 const Home = () => {
@@ -25,7 +24,7 @@ const Home = () => {
                     <h2>Direct Messages</h2>
                 </div>
             </div>
-            <div className="rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-zinc-900 w-full max-w-2xl min-h-[20rem] shadow-sm p-4">
+            <div className="flex flex-col items-center rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-zinc-900 w-full min-h-[20rem] shadow-sm p-4">
                 <p>Testing Editor</p>
                 <SimpleEditor />
             </div>
