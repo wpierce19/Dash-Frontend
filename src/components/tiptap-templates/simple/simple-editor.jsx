@@ -1,5 +1,6 @@
 import * as React from "react"
 import { EditorContent, EditorContext, useEditor } from "@tiptap/react"
+import { useUiStore } from "@/features/post/useUIStore"
 
 // --- Tiptap Core Extensions ---
 import { StarterKit } from "@tiptap/starter-kit"
@@ -233,10 +234,11 @@ export function SimpleEditor({
     if (disableSubmitWhenEmpty && isEmpty) return;
     try {
       setSubmitting(true);
-      console.log(html)
+      console.log("Handling Submit")
       await Promise.resolve(onSubmit(html))
     } finally {
       setSubmitting(false)
+      useUiStore.getState().closePostComposer()
     }
   }
 

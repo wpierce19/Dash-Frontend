@@ -1,8 +1,14 @@
 
-import { SimpleEditor } from '@/components/tiptap-templates/simple/simple-editor'
+import { SimpleEditor } from '@/components/tiptap-templates/simple/simple-editor';
+import { Link } from 'react-router-dom';
+import CreatePostModal from '@/features/post/CreatePost';
+import { useState } from 'react';
+import ComposeButton from '@/features/post/ComposeButton';
+import defaultAvatar from "../src/assets/default-avatar.png";
 
 const Home = () => {
     //const [html, setHtml] = useState('');
+    const [open, setOpen] = useState(false);
 
     return (
         <div>
@@ -18,7 +24,13 @@ const Home = () => {
                     </div>
                     <div className="border border-amber-300 px-4 flex justify-center">
                         <h1>FEED</h1>
+                        <ComposeButton 
+                            avatarURL={defaultAvatar}
+                            placeholder="What's on your mind?"
+                            onClick={() => setOpen(true)}
+                        />
                     </div>
+                    <CreatePostModal open={open} onClose={() => setOpen(false)} />
                 </div>
                 <div className="border border-amber-300 col-span-1 min-h-screen px-4 flex justify-center items-start">
                     <h2>Direct Messages</h2>

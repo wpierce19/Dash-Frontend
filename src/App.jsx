@@ -4,11 +4,12 @@ import Header from '../pages/Header';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import UserRegister from '../pages/Register';
+import CreatePost from './features/post/CreatePost';
 
 function App() {
   return (
     <BrowserRouter>
-      <div className="bg-gray-100 dark:bg-zinc-900 text-black dark:text-white w-full h-screen overflow-hidden">
+      <div className="bg-gray-100 dark:bg-[#1C1C1D] text-black dark:text-white w-full h-screen overflow-hidden">
         {/* Fixed Header */}
         <Header />
 
@@ -18,6 +19,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path='/login' element={<Login />}/>
             <Route path='/register' element={<UserRegister />}/>
+            <Route path='/createpost' element={<CreatePost />}/>
             {/* Other routes */}
           </Routes>
         </main>
