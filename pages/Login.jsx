@@ -17,7 +17,7 @@ const Login = () => {
                                 id="email"
                                 value={email}
                                 onChange={console.log("Email success")}
-                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 hover:cursor-pointer hover:bg-[#6E7073]"
                                 required
                             />
                         </div>
@@ -29,7 +29,7 @@ const Login = () => {
                                 id="password"
                                 value={password}
                                 onChange={console.log("password success")}
-                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 hover:cursor-pointer hover:bg-[#6E7073]"
                                 required
                             />
                         </div>

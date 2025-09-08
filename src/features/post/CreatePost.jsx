@@ -30,6 +30,12 @@ export default function CreatePostModal({ open, onClose }) {
         </div>
 
         <div className="p-4">
+          {/**Change this form to use Query mutate for creating a post */}
+          <form>
+            <label>Title:</label>
+            <input type="text" className="w-full mb-4 p-2 border border-gray-300 rounded" placeholder="Post Title" />
+          </form>
+          {/** SimpleEditor with onSubmitted to close the modal after successful submit */}
           <SimpleEditor
             submitLabel="Post"
             onSubmit={async (html) => {
