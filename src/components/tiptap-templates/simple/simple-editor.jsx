@@ -1,6 +1,5 @@
 import * as React from "react"
 import { EditorContent, EditorContext, useEditor } from "@tiptap/react"
-import { useUiStore } from "@/features/post/useUIStore"
 
 // --- Tiptap Core Extensions ---
 import { StarterKit } from "@tiptap/starter-kit"
@@ -153,9 +152,11 @@ const MobileToolbarContent = ({
 
 export function SimpleEditor({
   onSubmit,
+  onSubmitted,
   onchange,
   submitLabel = "Submit",
   disableSubmitWhenEmpty = true,
+  resetOnSuccess = true,
 }) {
   const isMobile = useIsMobile()
   const { height } = useWindowSize()
@@ -236,9 +237,13 @@ export function SimpleEditor({
       setSubmitting(true);
       console.log("Handling Submit")
       await Promise.resolve(onSubmit(html))
+      if (resetOnSuccess) {
+        setHtml("")
+        editor?.commands.clearContent(true)
+      }
+      onSubmitted?.()
     } finally {
       setSubmitting(false)
-      useUiStore.getState().closePostComposer()
     }
   }
 
