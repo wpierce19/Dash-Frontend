@@ -1,7 +1,11 @@
 //place api functions here for feed fetching
 import { useAuthStore } from '../auth/authStore';
 
-export const getFriendsPosts = async (token) => {
+export const getFriendsPosts = async () => {
+    const { token } = useAuthStore.getState();
+    if (!token) {
+        throw new Error('User not authenticated');
+    }
     try {
         const response = await fetch('/api/friends/posts', {
             method: 'GET',
