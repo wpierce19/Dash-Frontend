@@ -54,3 +54,21 @@ export const refetchProfile = async () => {
     localStorage.setItem('user', JSON.stringify(user));
     return user;
 };
+
+
+export const fetchFriends = async () => {
+    const { token } = useAuthStore.getState();
+    const response = await fetch('/api/me/friends', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to fetch friends');
+    }
+    const data = await response.json();
+    console.log("Friends fetched:", data);
+}
