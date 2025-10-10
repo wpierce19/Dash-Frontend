@@ -1,4 +1,4 @@
-import { useAuthStore } from "../auth/authApi";
+import { useAuthStore } from "@/store/authStore";
 
 export const searchUsers = async (query) => {
     const { token } = useAuthStore.getState();

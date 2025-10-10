@@ -1,5 +1,5 @@
 //place api functions here for feed fetching
-import { useAuthStore } from '../auth/authStore';
+import { useAuthStore } from "@/store/authStore";
 
 export const getFriendsPosts = async () => {
     const { token } = useAuthStore.getState();
