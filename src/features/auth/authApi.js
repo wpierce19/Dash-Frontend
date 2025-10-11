@@ -1,17 +1,5 @@
-import { create } from "zustand";
-import {persist} from "zustand/middleware";
-
-export const useAuthStore = create(
-    persist(
-        (set) => ({
-            token: null,
-            user: null,
-            setAuth: (token, user) => set({ token, user }),
-            clearAuth: () => set({ token: null, user: null }),
-        }),
-        { name: "auth-storage" } //used by localstrage
-    )
-);
+//API calls for authentication
+import { useAuthStore } from "@/store/authStore";
 
 export const createUser = async (newUser) => {
     const response = await fetch('/api/newUsers', {
