@@ -1,5 +1,5 @@
 import { Link, Navigate } from "react-router-dom";
-import { useState } from "react";
+import FieldInfo from "utils/fieldInfo";
 import { useForm } from "@tanstack/react-form";
 import { useCreateUser } from "@/features/auth/authHooks";
 
@@ -11,13 +11,9 @@ const form = useForm({
         username: '',
         email: '',
         password: '',
+        confirm_Password: '',
     },
     onSubmit: async (value) => {
-        if (value.password !== value.confirmPassword) {
-            // Handle password mismatch error (e.g., display error message)
-            console.error("Passwords do not match");
-            return;
-        }
         try {
             const payload = {
                 ...value, username: value.username.trim(), email: value.email.trim(), password: value.password.trim()
@@ -35,97 +31,250 @@ const form = useForm({
     }
 })
 
-
-    //Placeholder vars
-    const handleSignup = null;
-    const [signupData, setSignupData] = useState({
-        username: "",
-        email: "",
-        password: "",
-        confirmPassword: ""
-    });
-    const signupError = null;
-    const isSubmitting = null;
     return (
         <div className="min-h-screen flex items-center justify-center">
-            <div className="w-full max-w-md p-6 bg-gray-100 dark:bg-gray-500 rounded-lg shadow-lg dark:shadow-black">
-                <h2 className="text-2x1 font-bold text-center mb-6">Sign Up:</h2>
-
-                <form onSubmit={handleSignup}>
+            <div className="w-full max-w-md p-6 bg-gray-100 dark:bg-gray-500 rounded-lg shadow-lg">
+                <h1 className="text-2xl font-bold mb-4 text-black dark:text-white">Register:</h1>
+                <form onSubmit={(e) => {
+                    e.preventDefault();
+                    e.prventPropagation();
+                    form.handleSubmit(e);
+                }}>
                     <div className="mb-4">
-                        <label className="block text-black dark:text-white mb-1" htmlFor="username">
-                            Username
-                        </label>
-                        <input
-                            type="text"
-                            id="username"
-                            value={signupData.username}
-                            onChange={(e) =>
-                            setSignupData({ ...signupData, username: e.target.value })
-                            }
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            required
+                        <form.Field
+                            name="username"
+                            validators={{
+                                onChange: ({value}) => 
+                                    !value
+                                    ? "Username is required"
+                                    : value.length < 3
+                                        ? "Username must be at least 3 characters"
+                                        : undefined,
+                                onChangeAsyncDebounceMs: 500,
+                                onChangeAsync: async ({value}) => {
+                                    if (!value) return "Username is required";
+                                    const response = await fetch(`/api/users/exists?username=${value}`);
+                                    const data = await response.json();
+                                    return data.exists ? "Username already taken" : undefined;
+                                },
+                            }}
+                            children={(field) => {
+                                return (
+                                    <>
+                                        <div className="flex justify-between">
+                                            <label className="block text-black dark:text-white mb-1" htmlFor="username">Username</label>
+                                            <input 
+                                                className="bg-amber-50 text-white"
+                                                id={field.name}
+                                                name={field.name}
+                                                value={field.state.value}
+                                                onBlur={field.handleBlur}
+                                                onChange={(e) => field.handleChange(e.target.value)}
+                                            />
+                                            <div 
+                                                style={{
+                                                    width: '200px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    overflow: 'didden',
+                                                    whiteSpace: 'nowrap',
+                                                    textOverflow: 'ellipsis'
+                                            }}>
+                                                <div style={{minHeight: '1.5rem', display: 'flex', alignItems: 'center'}}>
+                                                    <FieldInfo field={field}/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
+                                )
+                            }}
                         />
                     </div>
                     <div className="mb-4">
-                        <label className="block text-black dark:text-white mb-1" htmlFor="email">
-                            Email
-                        </label>
-                        <input
-                            type="email"
-                            id="email"
-                            value={signupData.email}
-                            onChange={(e) => setSignupData({...signupData, email: e.target.value})}
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            required
-                        />
+                            <form.Field
+                                name="email"
+                                validators={{
+                                    onChange: ({value}) => 
+                                        !value.includes("@")
+                                        ? " Valid email is required"
+                                        : undefined,
+                                    onChangeAsyncDebounceMs: 500,
+                                    onChangeAsync: async ({value}) => {
+                                        if (!value) return "Email is required";
+                                        const response = await fetch(`/api/users/exists?email=${value}`);
+                                        const data = await response.json();
+                                        return data.exists ? "Email already in use" : undefined;
+                                    },
+                                }}
+                                children={(field) => {
+                                    return (
+                                        <>
+                                            <div className="flex justify-between">
+                                                <label className="block text-black dark:text-white mb-1" htmlFor="username">Username</label>
+                                                <input 
+                                                    className="bg-amber-50 text-white"
+                                                    id={field.name}
+                                                    name={field.name}
+                                                    value={field.state.value}
+                                                    onBlur={field.handleBlur}
+                                                    onChange={(e) => field.handleChange(e.target.value)}
+                                                />
+                                                <div 
+                                                    style={{
+                                                        width: '200px',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        overflow: 'didden',
+                                                        whiteSpace: 'nowrap',
+                                                        textOverflow: 'ellipsis'
+                                                }}>
+                                                    <div style={{minHeight: '1.5rem', display: 'flex', alignItems: 'center'}}>
+                                                        <FieldInfo field={field}/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </>
+                                    )
+                                }}
+                            />
                     </div>
-
                     <div className="mb-4">
-                        <label className="block text-black dark:text-white mb-1" htmlFor="password">
-                            Password
-                        </label>
-                        <input 
-                            type="password"
-                            id="password"
-                            value={signupData.password}
-                            onChange={(e) => setSignupData({...signupData, password: e.target.value})}
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            required
+                        <form.Field
+                            name="email"
+                            validators={{
+                                onChange: ({value}) => 
+                                    !value.includes("@")
+                                    ? " Valid email is required"
+                                    : undefined,
+                                onChangeAsyncDebounceMs: 500,
+                                onChangeAsync: async ({value}) => {
+                                    if (!value) return "Email is required";
+                                    const response = await fetch(`/api/users/exists?email=${value}`);
+                                    const data = await response.json();
+                                    return data.exists ? "Email already in use" : undefined;
+                                },
+                            }}
+                            children={(field) => {
+                                return (
+                                    <>
+                                        <div className="flex justify-between">
+                                            <label className="block text-black dark:text-white mb-1" htmlFor="username">Username</label>
+                                            <input 
+                                                className="bg-amber-50 text-white"
+                                                id={field.name}
+                                                name={field.name}
+                                                value={field.state.value}
+                                                onBlur={field.handleBlur}
+                                                onChange={(e) => field.handleChange(e.target.value)}
+                                            />
+                                            <div 
+                                                style={{
+                                                    width: '200px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    overflow: 'didden',
+                                                    whiteSpace: 'nowrap',
+                                                    textOverflow: 'ellipsis'
+                                            }}>
+                                                <div style={{minHeight: '1.5rem', display: 'flex', alignItems: 'center'}}>
+                                                    <FieldInfo field={field}/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
+                                )
+                            }}
                         />
                     </div>
-
-                    <div className="mb-6">
-                        <label className="block text-black dark:text-white mb-1" htmlFor="confirmPassword">
-                            Confirm Password
-                        </label>
-                        <input 
-                            type="password"
-                            id="confirmPassword"
-                            value={signupData.confirmPassword}
-                            onChange={(e) => setSignupData({...signupData, confirmPassword: e.target.value})}
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            required
+                    <div className="mb-4">
+                        <form.Field
+                            name="password"
+                            validators={{
+                                onChange: ({value}) => 
+                                    !value
+                                    ? "Password is required"
+                                    : value.length < 3
+                                        ? "Password must be at least 3 characters"
+                                        : undefined,
+                                onChangeAsyncDebounceMs: 500,
+                            }}
+                            children={(field) => {
+                                return (
+                                    <>
+                                        <div className="flex justify-between">
+                                            <label className="block text-black dark:text-white mb-1" htmlFor="username">Username</label>
+                                            <input 
+                                                className="bg-amber-50 text-white"
+                                                id={field.name}
+                                                name={field.name}
+                                                value={field.state.value}
+                                                onBlur={field.handleBlur}
+                                                onChange={(e) => field.handleChange(e.target.value)}
+                                            />
+                                            <div 
+                                                style={{
+                                                    width: '200px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    overflow: 'didden',
+                                                    whiteSpace: 'nowrap',
+                                                    textOverflow: 'ellipsis'
+                                            }}>
+                                                <div style={{minHeight: '1.5rem', display: 'flex', alignItems: 'center'}}>
+                                                    <FieldInfo field={field}/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
+                                )
+                            }}
                         />
                     </div>
-
-                    {signupError && (
-                        <div className="mb-4 text-red-600 text-sm">{signupError}</div>
-                    )}
-
-                    <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
-                    >
-                        {isSubmitting ? "Signing up..." : "Sign Up"}
-                    </button>
+                                        <div className="mb-4">
+                        <form.Field
+                            name="confirm_Password"
+                            validators={{
+                                onChangeListenTo: ['password'],
+                                onChange: ({value, fieldApi}) => {
+                                    if (value !== fieldApi.getFieldValue('password')) {
+                                        return "Passwords do not match";
+                                    }
+                                    return undefined;
+                                },
+                            }}
+                            children={(field) => {
+                                return (
+                                    <>
+                                        <div className="flex justify-between">
+                                            <label className="block text-black dark:text-white mb-1" htmlFor="username">Username</label>
+                                            <input 
+                                                className="bg-amber-50 text-white"
+                                                id={field.name}
+                                                name={field.name}
+                                                value={field.state.value}
+                                                onBlur={field.handleBlur}
+                                                onChange={(e) => field.handleChange(e.target.value)}
+                                            />
+                                            <div 
+                                                style={{
+                                                    width: '200px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    overflow: 'didden',
+                                                    whiteSpace: 'nowrap',
+                                                    textOverflow: 'ellipsis'
+                                            }}>
+                                                <div style={{minHeight: '1.5rem', display: 'flex', alignItems: 'center'}}>
+                                                    <FieldInfo field={field}/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
+                                )
+                            }}
+                        />
+                    </div>
                 </form>
-
-                <p className="mt-4 text-center text-sm text-black dark:text-white">
-                    Already have an account?{" "}
-                    <Link to="/login" className="text-black dark:text-white hover:underline">Login</Link>
-                </p>
             </div>
         </div>
     )
