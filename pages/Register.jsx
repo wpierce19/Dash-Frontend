@@ -1,7 +1,40 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useState } from "react";
+import { useForm } from "@tanstack/react-form";
+import { useCreateUser } from "@/features/auth/authHooks";
 
 const UserRegister = () => {
+const createUser = useCreateUser();
+const navigate = Navigate();
+const form = useForm({
+    defaultValues: {
+        username: '',
+        email: '',
+        password: '',
+    },
+    onSubmit: async (value) => {
+        if (value.password !== value.confirmPassword) {
+            // Handle password mismatch error (e.g., display error message)
+            console.error("Passwords do not match");
+            return;
+        }
+        try {
+            const payload = {
+                ...value, username: value.username.trim(), email: value.email.trim(), password: value.password.trim()
+            };
+            await createUser(payload);
+            // Handle successful registration (e.g., redirect to login or dashboard)
+            navigate('/home');
+
+        } catch (error) {
+            // Handle registration error (e.g., display error message)
+            if (error instanceof Error) {
+                console.error("Registration error:", error.message);
+            }
+        }
+    }
+})
+
 
     //Placeholder vars
     const handleSignup = null;
