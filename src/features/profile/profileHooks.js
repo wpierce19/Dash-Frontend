@@ -10,6 +10,7 @@ export const useGetPublicProfile = (id) => {
     });
 }
 
+//Will be used to refetch profile data after update
 export const useRefetchProfile = () => {
     return useQuery({
         queryKey: ['profile'],
