@@ -31,6 +31,7 @@ export const fetchAllMessages = async  () => {
     console.log("Messages fetched:", data);
 };
 
+// Fetch messages for a specific conversation
 export const fetchMessagesByConversation = async (conversationId) => {
     const { token } = useAuthStore.getState();
     const response = await fetch(`/api/messages?conversationId=${conversationId}`, {
