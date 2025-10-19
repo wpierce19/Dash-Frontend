@@ -1,6 +1,7 @@
 import { MoonIcon, SunIcon } from '@heroicons/react/24/solid';
 import { useThemeStore } from './useThemeStore';
 
+// Component to toggle between light and dark themes
 const AppTheme = () => {
     const isDarkMode = useThemeStore((s) => s.isDarkMode);
     const toggleTheme = useThemeStore((s) => s.toggleTheme);

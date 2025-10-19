@@ -1,5 +1,7 @@
 import {create} from 'zustand';
 
+
+// Zustand store to manage theme (light/dark) state
 export const useThemeStore = create((set) => ({
     isDarkMode: (() => {
         const stored = localStorage.getItem('darkMode');
